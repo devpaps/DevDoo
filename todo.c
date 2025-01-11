@@ -1,0 +1,155 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_TASK_LENGTH 256
+
+struct Task {
+  char *description;
+  struct Task *next;
+};
+
+char *home_directory() {
+  char *secure_getenv(const char *name);
+  char *todo_file = "/todo.txt";
+  char *home_directory = secure_getenv("HOME");
+  if (home_directory == NULL) {
+    perror("Failed to get the home directory");
+    return NULL;
+  }
+  strcat(home_directory, todo_file);
+  return home_directory;
+}
+
+// Function to add a task to the todo list
+void add_task(const char *task) {
+  char *full_path_directory = home_directory();
+  FILE *file = fopen(full_path_directory, "a");
+
+  if (file == NULL) {
+    perror("Failed to open the file");
+    return;
+  }
+  fprintf(file, "%s\n", task);
+  fclose(file);
+  printf("Added: %s\n", task);
+}
+
+// Function to list all tasks
+void list_tasks(void) {
+  char *full_path_directory = home_directory();
+  FILE *file = fopen(full_path_directory, "r");
+  if (file == NULL) {
+    perror("Failed to open the file!");
+    return;
+  }
+
+  char line[MAX_TASK_LENGTH];
+  int index = 1;
+
+  // how to check if the file is empty
+  // https://stackoverflow.com/questions/5431941/how-to-check-if-a-file-is-empty-in-c
+  int ch = fgetc(file);
+  if (ch == EOF) {
+    printf("Your Todo List is empty\n");
+    fclose(file);
+    return;
+  }
+
+  // put back the character that was read
+  ungetc(ch, file);
+
+  printf("Your Todo List:\n");
+  while (fgets(line, sizeof(line), file)) {
+    printf("%d. %s", index++, line);
+  }
+  fclose(file);
+}
+
+// Function to remove a task
+void remove_task(int task_num) {
+  char *full_path_directory = home_directory();
+  FILE *file = fopen(full_path_directory, "r");
+  if (file == NULL) {
+    perror("Failed to open the file");
+    return;
+  }
+
+  FILE *temp_file = fopen("temp.txt", "w");
+  if (temp_file == NULL) {
+    perror("Failed to open the temp file");
+    fclose(file);
+    return;
+  }
+
+  char line[MAX_TASK_LENGTH];
+  int index = 1;
+
+  while (fgets(line, sizeof(line), file)) {
+    if (index != task_num) {
+      fprintf(temp_file, "%s", line);
+    }
+    index++;
+  }
+
+  fclose(file);
+  fclose(temp_file);
+
+  remove(full_path_directory);
+  rename("temp.txt", full_path_directory);
+
+  printf("Removed task %d\n", task_num);
+}
+
+// Function to display the usage of the program
+void print_usage(const char *program_name) {
+  printf("Usage: %s [add, -a <task>] [list, -l] [remove, -r <task_num>]\n",
+         program_name);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    print_usage(argv[0]);
+    return 1;
+  }
+
+  if (strcmp(argv[1], "add") == 0 || strcmp(argv[1], "-a") == 0) {
+    if (argc < 3) {
+      printf("Error: Missing task description.\n");
+      return 1;
+    }
+
+    if (strlen(argv[2]) > MAX_TASK_LENGTH) {
+      printf("Error: Task description is too long.\n");
+      return 1;
+    }
+
+    //! TODO: Add a check for the = sign. i need to allow it
+    // to be used in the task description
+
+    // Concatenate the entire task description into one string
+    char task[MAX_TASK_LENGTH] = "";
+    for (int i = 2; i < argc; i++) {
+      strcat(task, argv[i]);
+      // Add a space between each word
+      if (i < argc - 1) {
+        strcat(task, " ");
+      }
+    }
+    add_task(task);
+
+  } else if (strcmp(argv[1], "list") == 0 || strcmp(argv[1], "-l") == 0) {
+    list_tasks();
+  } else if (strcmp(argv[1], "remove") == 0 || strcmp(argv[1], "-r") == 0) {
+    if (argc < 3) {
+      printf("Error: Missing task number.\n");
+      return 1;
+    }
+    int task_num = atoi(argv[2]);
+    remove_task(task_num);
+  } else {
+    print_usage(argv[0]);
+  }
+
+  return 0;
+}
