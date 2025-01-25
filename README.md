@@ -13,10 +13,48 @@ $ cd todo
 $ cmake ..
 $ make
 $ sudo make install
-$ ./todo add "Buy some milk"
-$ ./todo list
-$ ./todo remove 1
+$ todo add "Buy some milk"
+$ todo list
+$ todo remove 1
 ```
+
+## Usage
+
+### Add a Task
+
+To add a new task to the todo list, use the `add` or `-a` command followed by the task description.
+
+```sh
+todo add "Buy groceries"
+todo -a "Buy groceries"
+```
+
+### List All Tasks
+
+To list all tasks in the todo list, use the `list` or `-l` command.
+
+```sh
+todo list
+todo -l
+```
+
+### Remove a Task
+
+To remove a specific task from the todo list, use the `remove` or `-r` command followed by the task number.
+
+```sh
+todo remove 1
+todo -r 1
+```
+
+### Clear All Tasks
+
+To clear all tasks from the todo list, use the `clear` or `-c` command.
+
+```sh
+todo clear
+todo -c
+
 
 ## What is left to be done?
 
@@ -50,3 +88,4 @@ Do i even need this?
 ### Configurable Storage Path
 
 - [] Make the file storage path configurable via a settings file or environment variable. This would be especially useful for users who want to sync the file across devices using cloud storage?
+```

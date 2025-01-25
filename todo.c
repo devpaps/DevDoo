@@ -9,6 +9,10 @@ struct Task {
   struct Task *next;
 };
 
+/**
+ * Function to get the home directory and append the todo file path.
+ * @return The full path to the todo file.
+ */
 char *home_directory() {
   char *secure_getenv(const char *name);
   char *todo_file = "/todo.txt";
@@ -21,7 +25,10 @@ char *home_directory() {
   return home_directory;
 }
 
-// Function to add a task to the todo list
+/**
+ * Function to add a task to the todo list.
+ * @param task The description of the task to be added.
+ */
 void add_task(const char *task) {
   char *full_path_directory = home_directory();
   FILE *file = fopen(full_path_directory, "a");
@@ -90,7 +97,11 @@ void removeAllTodos() {
   printf("Cleared all todos!\n");
 }
 
-// Function to remove a task
+/**
+ * Function to remove a specific task from the todo list.
+ * @param task_num The number of the task to be removed.
+ * @return 0 if the task was successfully removed, 1 otherwise.
+ */
 int remove_task(int task_num) {
   char *full_path_directory = home_directory();
   FILE *file = fopen(full_path_directory, "r");
@@ -184,6 +195,7 @@ int main(int argc, char *argv[]) {
       return 1;
     }
     int task_num = atoi(argv[2]);
+    // Return early if the user input anything other then a integer
     if (task_num == 0) {
       fprintf(stderr, "Only add numbers!\n");
       return 1;
