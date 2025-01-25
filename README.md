@@ -3,9 +3,7 @@
 ![DevDoo](./devdoo.png)
 
 This is simple todo manager that I've built in C. It's a simple command line tool that allows you to add, list, and remove tasks from a todo list.
-The saved `.txt` file is stored in the home directory of the user. This implies for Linux users only at the moment.
-
-I named it DevDoo because I'm a developer and it's a todo manager. I'm not very creative with names. :)
+The saved `.txt` file is stored in the home directory of the user. This implies for Linux users only at the moment, i'm going to test it on MacOS soon.
 
 ## How to install and use it
 
