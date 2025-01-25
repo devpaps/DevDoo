@@ -51,7 +51,7 @@ void list_tasks(void) {
   // https://stackoverflow.com/questions/5431941/how-to-check-if-a-file-is-empty-in-c
   int ch = fgetc(file);
   if (ch == EOF) {
-    printf("Your Todo List is empty\n");
+    printf("Your todo list is empty\n");
     fclose(file);
     return;
   }
@@ -66,30 +66,66 @@ void list_tasks(void) {
   fclose(file);
 }
 
+void removeAllTodos() {
+  char *full_path_directory = home_directory();
+  FILE *read_file = fopen(full_path_directory, "r");
+
+  int ch = fgetc(read_file);
+  if (ch == EOF) {
+    printf("Your todo list is already empty\n");
+    fclose(read_file);
+    return;
+  }
+
+  // put back the character that was read
+  ungetc(ch, read_file);
+
+  FILE *file = fopen(full_path_directory, "w");
+  if (file == NULL) {
+    perror("Failed to open the temp file");
+    fclose(file);
+    return;
+  }
+
+  printf("Cleared all todos!\n");
+}
+
 // Function to remove a task
-void remove_task(int task_num) {
+int remove_task(int task_num) {
   char *full_path_directory = home_directory();
   FILE *file = fopen(full_path_directory, "r");
   if (file == NULL) {
     perror("Failed to open the file");
-    return;
+    return 1;
   }
 
   FILE *temp_file = fopen("temp.txt", "w");
   if (temp_file == NULL) {
     perror("Failed to open the temp file");
     fclose(file);
-    return;
+    return 1;
   }
 
   char line[MAX_TASK_LENGTH];
   int index = 1;
+  int todo_found = 0;
 
   while (fgets(line, sizeof(line), file)) {
-    if (index != task_num) {
-      fprintf(temp_file, "%s", line);
+    if (index == task_num) {
+      todo_found = 1;
+    } else {
+      fputs(line, temp_file);
     }
     index++;
+  }
+
+  // If the requested task_num did not exist in the file, show a message
+  if (!todo_found) {
+    printf("There is no task in that position!\n");
+    fclose(file);
+    fclose(temp_file);
+    remove("temp.txt");
+    return 1;
   }
 
   fclose(file);
@@ -99,11 +135,13 @@ void remove_task(int task_num) {
   rename("temp.txt", full_path_directory);
 
   printf("Removed task %d\n", task_num);
+  return 0;
 }
 
 // Function to display the usage of the program
 void print_usage(const char *program_name) {
-  printf("Usage: %s [add, -a <task>] [list, -l] [remove, -r <task_num>]\n",
+  printf("Usage: %s [add, -a <task>] [list, -l] [remove, -r <task_num>] "
+         "[clear, -c]\n",
          program_name);
 }
 
@@ -146,7 +184,13 @@ int main(int argc, char *argv[]) {
       return 1;
     }
     int task_num = atoi(argv[2]);
+    if (task_num == 0) {
+      fprintf(stderr, "Only add numbers!\n");
+      return 1;
+    }
     remove_task(task_num);
+  } else if (strcmp(argv[1], "clear") == 0 || strcmp(argv[1], "-c") == 0) {
+    removeAllTodos();
   } else {
     print_usage(argv[0]);
   }

@@ -39,6 +39,7 @@ Enable the app to accept arguments like:
 - [x] add <task>
 - [x] list
 - [x] remove <task_id>
+- [x] clear
 
 Do i even need this?
 
