@@ -55,6 +55,7 @@ To clear all tasks from the todo list, use the `clear` or `-c` command.
 todo clear
 todo -c
 
+```
 
 ## What is left to be done?
 
@@ -88,4 +89,7 @@ Do i even need this?
 ### Configurable Storage Path
 
 - [] Make the file storage path configurable via a settings file or environment variable. This would be especially useful for users who want to sync the file across devices using cloud storage?
+
+```
+
 ```
