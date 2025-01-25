@@ -1,4 +1,6 @@
-# Simple todo manager called "DevDoo"
+# Todo CLI made in C
+
+![DevDoo](./devdoo.png)
 
 This is simple todo manager that I've built in C. It's a simple command line tool that allows you to add, list, and remove tasks from a todo list.
 The saved `.txt` file is stored in the home directory of the user. This implies for Linux users only at the moment.
