@@ -14,9 +14,9 @@ struct Task {
  * @return The full path to the todo file.
  */
 char *home_directory() {
-  char *secure_getenv(const char *name);
+  char *getenv(const char *name);
   char *todo_file = "/todo.txt";
-  char *home_directory = secure_getenv("HOME");
+  char *home_directory = getenv("HOME");
   if (home_directory == NULL) {
     perror("Failed to get the home directory");
     return NULL;
@@ -167,24 +167,33 @@ int main(int argc, char *argv[]) {
       printf("Error: Missing task description.\n");
       return 1;
     }
-
-    if (strlen(argv[2]) > MAX_TASK_LENGTH) {
-      printf("Error: Task description is too long.\n");
+    // Calculate total length required, including spaces between words.
+    size_t total_length = 0;
+    for (int i = 2; i < argc; i++) {
+      total_length += strlen(argv[i]);
+      if (i < argc - 1) { // Add one for the space between words
+        total_length++;
+      }
+    }
+    // Abort if the combined length would exceed our buffer.
+    if (total_length >= MAX_TASK_LENGTH) {
+      fprintf(stderr, "Error: Task description is too long.\n");
       return 1;
     }
 
-    //! TODO: Add a check for the = sign. i need to allow it
-    // to be used in the task description
-
     // Concatenate the entire task description into one string
     char task[MAX_TASK_LENGTH] = "";
+    size_t current_length = 0;
     for (int i = 2; i < argc; i++) {
+      size_t arg_len = strlen(argv[i]);
       strcat(task, argv[i]);
+      current_length += arg_len;
       // Add a space between each word
       if (i < argc - 1) {
-        strcat(task, " ");
+        task[current_length++] = ' ';
       }
     }
+    task[current_length] = '\0';
     add_task(task);
 
   } else if (strcmp(argv[1], "list") == 0 || strcmp(argv[1], "-l") == 0) {
