@@ -1,3 +1,4 @@
+#include "todo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +14,7 @@ struct Task {
  * Function to get the home directory and append the todo file path.
  * @return The full path to the todo file.
  */
-char *home_directory() {
+char *home_directory(void) {
   char *getenv(const char *name);
   char *todo_file = "/todo.txt";
   char *home_directory = getenv("HOME");
@@ -72,7 +73,7 @@ void list_tasks(void) {
   fclose(file);
 }
 
-void removeAllTodos() {
+void removeAllTodos(void) {
   char *full_path_directory = home_directory();
   FILE *read_file = fopen(full_path_directory, "r");
 

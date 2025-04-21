@@ -3,7 +3,7 @@
 #include <CUnit/CUnit.h>
 #include <stdio.h>
 
-void test_add_task() {
+void test_add_task(void) {
   add_task("Test Task 1");
   FILE *file = fopen(home_directory(), "r");
   CU_ASSERT_PTR_NOT_NULL(file);
@@ -17,7 +17,7 @@ void test_add_task() {
   fclose(file);
 }
 
-void test_list_tasks() {
+void test_list_tasks(void) {
   add_task("Task 1");
   add_task("Task 2");
 
@@ -36,7 +36,7 @@ void test_list_tasks() {
   fclose(file);
 }
 
-void test_remove_task() {
+void test_remove_task(void) {
   add_task("Task to Remove");
   int result = remove_task(1);
   CU_ASSERT_EQUAL(result, 0);
@@ -50,7 +50,7 @@ void test_remove_task() {
   fclose(file);
 }
 
-void test_clear_tasks() {
+void test_clear_tasks(void) {
   add_task("Task 1");
   add_task("Task 2");
   removeAllTodos();
