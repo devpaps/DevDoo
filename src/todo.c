@@ -79,7 +79,6 @@ void removeAllTodos() {
   int ch = fgetc(read_file);
   if (ch == EOF) {
     printf("Your todo list is already empty\n");
-    fclose(read_file);
     return;
   }
 
@@ -89,9 +88,10 @@ void removeAllTodos() {
   FILE *file = fopen(full_path_directory, "w");
   if (file == NULL) {
     perror("Failed to open the temp file");
-    fclose(file);
     return;
   }
+  fclose(file);
+  fclose(read_file);
 
   printf("Cleared all todos!\n");
 }
