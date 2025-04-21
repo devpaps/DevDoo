@@ -1,9 +1,7 @@
-#include "../src/todo.h" // Include your implementation file
+#include "../src/todo.h"
 #include <CUnit/Basic.h>
 #include <CUnit/CUnit.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void test_add_task() {
   add_task("Test Task 1");
@@ -11,7 +9,9 @@ void test_add_task() {
   CU_ASSERT_PTR_NOT_NULL(file);
 
   char line[MAX_TASK_LENGTH];
-  fgets(line, sizeof(line), file);
+  char *ret = fgets(line, sizeof(line), file);
+
+  CU_ASSERT_PTR_NOT_NULL(ret);
   CU_ASSERT_STRING_EQUAL(line, "Test Task 1\n");
 
   fclose(file);
@@ -25,7 +25,9 @@ void test_list_tasks() {
   CU_ASSERT_PTR_NOT_NULL(file);
 
   char line[MAX_TASK_LENGTH];
-  fgets(line, sizeof(line), file);
+  char *ret = fgets(line, sizeof(line), file);
+
+  CU_ASSERT_PTR_NOT_NULL(ret);
   CU_ASSERT_STRING_EQUAL(line, "Task 1\n");
 
   fgets(line, sizeof(line), file);
