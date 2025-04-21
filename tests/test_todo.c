@@ -30,7 +30,8 @@ void test_list_tasks(void) {
   CU_ASSERT_PTR_NOT_NULL(ret);
   CU_ASSERT_STRING_EQUAL(line, "Task 1\n");
 
-  fgets(line, sizeof(line), file);
+  char *ret2 = fgets(line, sizeof(line), file);
+  CU_ASSERT_PTR_NOT_NULL(ret2);
   CU_ASSERT_STRING_EQUAL(line, "Task 2\n");
 
   fclose(file);
