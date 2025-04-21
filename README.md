@@ -64,11 +64,8 @@ todo -c
 - [x] Add dynamic home directory check
 - [] Add date for when it was created and updated
 - [] Encryption for the todo.txt file, OpenSSL?
-- [] Add a `--help` flag to show the help message
 - [] Colorized Output
-- [] Audit Log??
-- [] Tests - https://github.com/ThrowTheSwitch/Unity
-- [] Rename the toll to just "td" for a fast typeout in the terminal
+- [] Rename the tool to just "td" for a fast typeout in the terminal
 - [] Consider publishing it to package managers like dnf, apt, or brew, if it get popular enough
 
 ### Command-Line Arguments
