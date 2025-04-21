@@ -54,8 +54,7 @@ void list_tasks(void) {
   char line[MAX_TASK_LENGTH];
   int index = 1;
 
-  // how to check if the file is empty
-  // https://stackoverflow.com/questions/5431941/how-to-check-if-a-file-is-empty-in-c
+  // check if the file is empty
   int ch = fgetc(file);
   if (ch == EOF) {
     printf("Your todo list is empty\n");
