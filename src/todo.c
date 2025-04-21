@@ -79,11 +79,13 @@ void removeAllTodos() {
   int ch = fgetc(read_file);
   if (ch == EOF) {
     printf("Your todo list is already empty\n");
+    fclose(read_file);
     return;
   }
 
   // put back the character that was read
   ungetc(ch, read_file);
+  fclose(read_file);
 
   FILE *file = fopen(full_path_directory, "w");
   if (file == NULL) {
@@ -91,7 +93,6 @@ void removeAllTodos() {
     return;
   }
   fclose(file);
-  fclose(read_file);
 
   printf("Cleared all todos!\n");
 }
